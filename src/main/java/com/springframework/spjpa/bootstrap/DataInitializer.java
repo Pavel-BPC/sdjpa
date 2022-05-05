@@ -4,8 +4,10 @@ import com.springframework.spjpa.domain.Book;
 import com.springframework.spjpa.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+@Profile({"local", "default"})
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -14,6 +16,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        bookRepository.deleteAll();
         Book book = new Book("title_1", "isbn_1", "publisher_1");
         Book save = bookRepository.save(book);
         System.out.println("Book id - " + save.getId());
