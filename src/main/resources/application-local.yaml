@@ -1,6 +1,10 @@
 spring:
+  liquibase:
+#    change-log: /db.changelog/changelog-master.xml
+    user: bookadmin
+    password: password
   datasource:
-    username: bookadmin
+    username: bookuser
     password: password
     url: jdbc:mysql://localhost:3306/bookdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
   jpa:
