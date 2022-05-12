@@ -1,6 +1,6 @@
 spring:
   datasource:
-    username: bookadmin
+    username: bookuser
     password: password
     url: jdbc:mysql://localhost:3306/bookdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
   jpa:
@@ -9,3 +9,6 @@ spring:
   sql:
     init:
       mode: always
+  flyway:
+    user: bookadmin
+    password: password
