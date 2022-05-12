@@ -1,6 +1,5 @@
 spring:
   liquibase:
-#    change-log: /db.changelog/changelog-master.xml
     user: bookadmin
     password: password
   datasource:

@@ -9,4 +9,6 @@
   http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd">
     <include  file="db/changelog/1-baseline-changelog.xml"/>
     <include  file="db/changelog/2-init-hibernate.xml"/>
+    <include  file="db/changelog/3-add-author.xml"/>
+    <include  file="db/changelog/4-add-colum-authorid-to-book.xml"/>
 </databaseChangeLog>
