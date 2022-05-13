@@ -1,12 +1,21 @@
 package com.springframework.spjpa;
 
+import com.springframework.spjpa.domain.AuthorUUID;
+import com.springframework.spjpa.domain.BookUUID;
+import com.springframework.spjpa.repository.AuthorRepository;
+import com.springframework.spjpa.repository.AuthorUUIDRepository;
 import com.springframework.spjpa.repository.BookRepository;
+import com.springframework.spjpa.repository.BookUUIDRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -18,9 +27,56 @@ public class MysqlIntegrationTest {
     @Autowired
     BookRepository bookRepository;
 
+    @Autowired
+    BookUUIDRepository bookUUIDRepository;
+
+    @Autowired
+    AuthorUUIDRepository authorUUIDRepository;
+
+    @Autowired
+    AuthorRepository authorRepository;
+
     @Test
     void mysqlIntegrationTest() {
-        long count = bookRepository.count();
-        assertThat(count).isEqualTo(1);
+        long countBook = bookRepository.count();
+        assertThat(countBook).isEqualTo(1);
+
+        long countBookUUID = bookUUIDRepository.count();
+        assertThat(countBookUUID).isEqualTo(1);
+
+        long countAuthorUUID = authorUUIDRepository.count();
+        assertThat(countAuthorUUID).isEqualTo(1);
+
+        long countAuthor = authorRepository.count();
+        assertThat(countAuthor).isEqualTo(1);
+    }
+
+    @Test
+    void testUuidOperation() {
+        List<UUID> collectAuthorUUID = authorUUIDRepository.findAll().stream().map(AuthorUUID::getId).collect(Collectors.toList());
+        assertThat(collectAuthorUUID).isNotNull();
+
+        List<UUID> collectBookUUID = bookUUIDRepository.findAll().stream().map(BookUUID::getId).collect(Collectors.toList());
+        assertThat(collectBookUUID).isNotNull();
+
+    }
+    @Test
+    void testBookUuid() {
+        BookUUID bookUuid = bookUUIDRepository.save(new BookUUID());
+        assertThat(bookUuid).isNotNull();
+        assertThat(bookUuid.getId());
+
+        BookUUID fetched = bookUUIDRepository.getById(bookUuid.getId());
+        assertThat(fetched).isNotNull();
+    }
+
+    @Test
+    void testAuthorUuid() {
+        AuthorUUID authorUuid = authorUUIDRepository.save(new AuthorUUID());
+        assertThat(authorUuid).isNotNull();
+        assertThat(authorUuid.getId()).isNotNull();
+
+        AuthorUUID fetched = authorUUIDRepository.getById(authorUuid.getId());
+        assertThat(fetched).isNotNull();
     }
 }
