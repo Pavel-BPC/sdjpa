@@ -1,11 +1,9 @@
 package com.springframework.spjpa;
 
 import com.springframework.spjpa.domain.AuthorUUID;
+import com.springframework.spjpa.domain.BookNatural;
 import com.springframework.spjpa.domain.BookUUID;
-import com.springframework.spjpa.repository.AuthorRepository;
-import com.springframework.spjpa.repository.AuthorUUIDRepository;
-import com.springframework.spjpa.repository.BookRepository;
-import com.springframework.spjpa.repository.BookUUIDRepository;
+import com.springframework.spjpa.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -36,6 +34,18 @@ public class MysqlIntegrationTest {
     @Autowired
     AuthorRepository authorRepository;
 
+    @Autowired
+    BookNaturalRepository bookNaturalRepository;
+
+    @Test
+    void bookNaturalTest() {
+        BookNatural bookNatural = new BookNatural();
+        bookNatural.setTitle("title");
+        BookNatural save = bookNaturalRepository.save(bookNatural);
+        BookNatural fetched = bookNaturalRepository.getById(save.getTitle());
+        assertThat(fetched).isNotNull();
+    }
+
     @Test
     void mysqlIntegrationTest() {
         long countBook = bookRepository.count();
@@ -60,6 +70,7 @@ public class MysqlIntegrationTest {
         assertThat(collectBookUUID).isNotNull();
 
     }
+
     @Test
     void testBookUuid() {
         BookUUID bookUuid = bookUUIDRepository.save(new BookUUID());
