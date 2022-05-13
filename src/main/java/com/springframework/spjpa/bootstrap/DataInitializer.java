@@ -1,8 +1,10 @@
 package com.springframework.spjpa.bootstrap;
 
 import com.springframework.spjpa.domain.Author;
+import com.springframework.spjpa.domain.AuthorUUID;
 import com.springframework.spjpa.domain.Book;
 import com.springframework.spjpa.repository.AuthorRepository;
+import com.springframework.spjpa.repository.AuthorUUIDRepository;
 import com.springframework.spjpa.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -18,6 +20,8 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private AuthorRepository authorRepository;
+    @Autowired
+    private AuthorUUIDRepository authorUUIDRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -30,5 +34,10 @@ public class DataInitializer implements CommandLineRunner {
         Book book = new Book("title_1", "isbn_1", "publisher_1", null);
         bookRepository.save(book);
         bookRepository.findAll().forEach(System.out::println);
+
+        authorUUIDRepository.deleteAll();
+        AuthorUUID authorUUID = new AuthorUUID("first name UUID", "last name UUID");
+        authorUUIDRepository.save(authorUUID);
+        authorUUIDRepository.findAll().forEach(System.out::println);
     }
 }
