@@ -1,1 +1,26 @@
+spring:
+  flyway:
+    locations: classpath:db/migration
+    user: bookadmin
+    password: password
+  sql:
+    init:
+      mode: always
+  datasource:
+    username: bookuser
+    password: password
+    url: jdbc:mysql://localhost:3306/bookdb2?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: false
+    database: mysql
 
+logging:
+  level:
+    org.hibernate.type.descriptor.sql: trace
