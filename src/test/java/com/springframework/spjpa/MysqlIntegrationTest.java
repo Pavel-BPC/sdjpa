@@ -3,6 +3,8 @@ package com.springframework.spjpa;
 import com.springframework.spjpa.domain.AuthorUUID;
 import com.springframework.spjpa.domain.BookNatural;
 import com.springframework.spjpa.domain.BookUUID;
+import com.springframework.spjpa.domain.compose.AuthorCompose;
+import com.springframework.spjpa.domain.compose.IdName;
 import com.springframework.spjpa.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,26 @@ public class MysqlIntegrationTest {
 
     @Autowired
     BookNaturalRepository bookNaturalRepository;
+
+    @Autowired
+    AuthorComposeRepository authorComposeRepository;
+
+    @Test
+    void authorComposeTest() {
+        IdName idName = new IdName();
+        idName.setFirstName("firstName id");
+        idName.setLastName("lastName id");
+        AuthorCompose authorCompose = new AuthorCompose();
+        authorCompose.setCountry("BY");
+        authorCompose.setFirstName(idName.getFirstName());
+        authorCompose.setLastName(idName.getLastName());
+
+        AuthorCompose save = authorComposeRepository.save(authorCompose);
+        assertThat(save).isNotNull();
+
+        AuthorCompose fetched = authorComposeRepository.getById(idName);
+        assertThat(fetched).isNotNull();
+    }
 
     @Test
     void bookNaturalTest() {
