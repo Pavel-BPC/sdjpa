@@ -1,0 +1,1 @@
+alter table bookuuid change id id varbinary(16);
