@@ -27,6 +27,33 @@ class AuthorDaoImplTest {
     }
 
     @Test
+    void deleteAuthorByIdTest() {
+        Author author = new Author("firstName", "LastName");
+        Author authorSave = authorDao.saveNewAuthor(author);
+        assertThat(authorSave).isNotNull();
+
+        authorDao.deleteAuthorById(authorSave.getId());
+
+        Author authorDelete = authorDao.getById(authorSave.getId());
+        assertThat(authorDelete).isNull();
+    }
+
+    @Test
+    void updateAuthorTest() {
+        Author author = new Author("firstName", "N");
+        Author authorSave = authorDao.saveNewAuthor(author);
+        assertThat(authorSave).isNotNull();
+
+        authorSave.setLastName("LastName");
+        Author authorUpdate = authorDao.updateAuthor(authorSave);
+        assertThat(authorUpdate).isNotNull();
+
+        Author authorUpdated = authorDao.getById(authorSave.getId());
+        assertThat(authorUpdated.getLastName()).isEqualTo(authorSave.getLastName());
+
+    }
+
+    @Test
     void saveNewAuthorTest() {
         Author author = authorDao.saveNewAuthor(new Author("Nikola", "Bogoga"));
         assertThat(author).isNotNull();

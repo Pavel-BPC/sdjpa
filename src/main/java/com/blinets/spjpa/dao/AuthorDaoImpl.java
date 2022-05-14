@@ -13,6 +13,7 @@ public class AuthorDaoImpl implements AuthorDao {
     public static final String SELECT_FROM_AUTHOR_WHERE_NAME = "SELECT * FROM author WHERE first_name = ? and last_name = ?";
     public static final String SELECT_LAST_INSERT_ID = "SELECT LAST_INSERT_ID()";
     public static final String INSERT_INTO_AUTHOR_FIRST_NAME_LAST_NAME_VALUES = "INSERT INTO author (first_name, last_name) VALUES(?,?)";
+    public static final String UPDATE_AUTHOR_SET_FIRST_NAME_LAST_NAME_WHERE_AUTHOR_ID = "UPDATE author SET first_name = ?, last_name = ? where author.id = ?";
     @Autowired
     DataSource dataSource;
 
@@ -102,6 +103,50 @@ public class AuthorDaoImpl implements AuthorDao {
             }
         }
         return null;
+    }
+
+    @Override
+    public Author updateAuthor(Author author) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = dataSource.getConnection();
+            preparedStatement = connection.prepareStatement(UPDATE_AUTHOR_SET_FIRST_NAME_LAST_NAME_WHERE_AUTHOR_ID);
+            preparedStatement.setString(1, author.getFirstName());
+            preparedStatement.setString(2, author.getLastName());
+            preparedStatement.setLong(3, author.getId());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                closeAll(connection, preparedStatement, resultSet);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return getById(author.getId());
+    }
+
+    @Override
+    public void deleteAuthorById(Long id) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = dataSource.getConnection();
+            preparedStatement = connection.prepareStatement("DELETE FROM author WHERE author.id = ?");
+            preparedStatement.setLong(1, id);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                closeAll(connection, preparedStatement, null);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void closeAll(Connection connection, PreparedStatement preparedStatement, ResultSet resultSet) throws SQLException {
