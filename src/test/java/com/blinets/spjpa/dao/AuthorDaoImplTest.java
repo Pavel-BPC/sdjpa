@@ -27,6 +27,14 @@ class AuthorDaoImplTest {
     }
 
     @Test
+    void saveNewAuthorTest() {
+        Author author = authorDao.saveNewAuthor(new Author("Nikola", "Bogoga"));
+        assertThat(author).isNotNull();
+        Author byId = authorDao.getById(author.getId());
+        assertThat(byId).isNotNull();
+    }
+
+    @Test
     void findByNameTest() {
         Author byName = authorDao.findByName("Pavel", "Blinets");
         assertThat(byName).isNotNull();
