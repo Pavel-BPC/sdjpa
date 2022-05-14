@@ -22,7 +22,7 @@ class AuthorDaoImplTest {
 
     @Test
     void getById() {
-        Author byId = authorDao.getById(5L);
+        Author byId = authorDao.getById(1L);
         assertThat(byId).isNotNull();
     }
 }
