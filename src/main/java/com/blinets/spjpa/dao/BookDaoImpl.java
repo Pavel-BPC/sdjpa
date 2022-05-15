@@ -1,9 +1,11 @@
 package com.blinets.spjpa.dao;
 
 import com.blinets.spjpa.domain.Book;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class BookDaoImpl implements BookDao {
     @Override
     public Book saveBook(Book book) {
