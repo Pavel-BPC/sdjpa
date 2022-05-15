@@ -24,6 +24,8 @@ class BookDaoTest {
     @Autowired
     BookDao bookDao;
 
+    @Autowired
+    AuthorDao authorDao;
     @Test
     void saveBook() {
         Book byId = bookDao.findById(1L);
@@ -32,7 +34,9 @@ class BookDaoTest {
 
     @Test
     void deleteBookById() {
-        Book book = bookDao.saveBook(new Book("title deleteBookById", "isbn deleteBookById", "publisher deleteBookById", 1L));
+
+        Book book = bookDao.saveBook(new Book("title deleteBookById", "isbn deleteBookById",
+                "publisher deleteBookById", null));
         assertThat(book).isNotNull();
 
         bookDao.deleteBookById(book.getId());
@@ -43,7 +47,8 @@ class BookDaoTest {
 
     @Test
     void updateBook() {
-        Book book = bookDao.saveBook(new Book("title updateBook", "isbn updateBook", "publisher updateBook", 1L));
+        Book book = bookDao.saveBook(new Book("title updateBook", "isbn updateBook",
+                "publisher updateBook", authorDao.getById(1L)));
         assertThat(book).isNotNull();
 
         book.setIsbn("1");
@@ -60,7 +65,7 @@ class BookDaoTest {
 
     @Test
     void findByTitle() {
-        Book book = bookDao.saveBook(new Book("title findByTitle", "isbn findByTitle", "publisher findByTitle", 1L));
+        Book book = bookDao.saveBook(new Book("title findByTitle", "isbn findByTitle", "publisher findByTitle", null));
         assertThat(book).isNotNull();
 
         List<Book> byTitle = bookDao.findByTitle(book.getTitle());
@@ -71,7 +76,7 @@ class BookDaoTest {
 
     @Test
     void findById() {
-        Book book = bookDao.saveBook(new Book("title findById", "isbn findById", "publisher findById", 1L));
+        Book book = bookDao.saveBook(new Book("title findById", "isbn findById", "publisher findById", null));
         assertThat(book).isNotNull();
 
         Book bookFetch = bookDao.findById(book.getId());

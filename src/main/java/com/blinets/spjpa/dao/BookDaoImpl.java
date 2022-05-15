@@ -13,6 +13,8 @@ import java.util.List;
 public class BookDaoImpl implements BookDao {
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private AuthorDao authorDao;
 
     @Override
     public Book saveBook(Book book) {
@@ -25,7 +27,12 @@ public class BookDaoImpl implements BookDao {
             preparedStatement.setString(1, book.getIsbn());
             preparedStatement.setString(2, book.getPublisher());
             preparedStatement.setString(3, book.getTitle());
-            preparedStatement.setLong(4, book.getAuthorId());
+            if (book.getAuthor() != null) {
+                preparedStatement.setLong(4, book.getAuthor().getId());
+            }
+            else {
+                preparedStatement.setNull(4, Types.BIGINT);
+            }
             preparedStatement.execute();
 
             Statement statement = connection.createStatement();
@@ -80,7 +87,9 @@ public class BookDaoImpl implements BookDao {
             preparedStatement.setString(1, book.getIsbn());
             preparedStatement.setString(2, book.getPublisher());
             preparedStatement.setString(3, book.getTitle());
-            preparedStatement.setLong(4, book.getAuthorId());
+            if(book.getAuthor() != null) {
+                preparedStatement.setLong(4, book.getAuthor().getId());
+            }
             preparedStatement.setLong(5, book.getId());
             preparedStatement.execute();
 
@@ -170,7 +179,7 @@ public class BookDaoImpl implements BookDao {
         book.setTitle(resultSet.getString("title"));
         book.setPublisher(resultSet.getString("publisher"));
         book.setIsbn(resultSet.getString("isbn"));
-        book.setAuthorId(resultSet.getLong("author_id"));
+        book.setAuthor(authorDao.getById(resultSet.getLong("author_id")));
         book.setId(resultSet.getLong("id"));
         return book;
     }
