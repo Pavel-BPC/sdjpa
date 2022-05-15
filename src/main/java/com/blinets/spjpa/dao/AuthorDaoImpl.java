@@ -1,6 +1,7 @@
 package com.blinets.spjpa.dao;
 
 import com.blinets.spjpa.domain.Author;
+import org.springframework.jdbc.core.RowMapper;
 
 public class AuthorDaoImpl implements AuthorDao {
     @Override
@@ -25,6 +26,9 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public void deleteAuthorById(Long id) {
+    }
 
+    private RowMapper<Author> getRowMapper() {
+        return new AuthorRawMapper();
     }
 }
