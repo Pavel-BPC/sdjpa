@@ -41,6 +41,6 @@ public class AuthorDaoImpl implements AuthorDao {
     }
 
     private RowMapper<Author> getRowMapper() {
-        return new AuthorRawMapper();
+        return new AuthorRowMapper();
     }
 }
