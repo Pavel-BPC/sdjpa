@@ -1,4 +1,4 @@
-package com.blinets.spjpa.dao;
+package com.blinets.spjpa.dao.rowMapper;
 
 import com.blinets.spjpa.domain.Author;
 import org.springframework.jdbc.core.RowMapper;

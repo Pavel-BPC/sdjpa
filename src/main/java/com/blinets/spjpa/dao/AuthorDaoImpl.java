@@ -1,5 +1,6 @@
 package com.blinets.spjpa.dao;
 
+import com.blinets.spjpa.dao.rowMapper.AuthorRowMapper;
 import com.blinets.spjpa.domain.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

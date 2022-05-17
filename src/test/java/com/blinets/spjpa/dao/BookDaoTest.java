@@ -6,14 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Collections;
+import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 @ActiveProfiles("local")
@@ -26,27 +26,29 @@ class BookDaoTest {
 
     @Autowired
     AuthorDao authorDao;
+
     @Test
-    void saveBook() {
-        Book byId = bookDao.findById(1L);
-        assertThat(byId).isNotNull();
+    void saveBookTest() throws SQLException {
+        Book book = bookDao.saveBook(new Book("title saveBookTest", "isbn saveBookTest",
+                "publisher saveBookTest", authorDao.getById(1L)));
+        assertThat(book).isNotNull();
     }
 
     @Test
-    void deleteBookById() {
-
+    void deleteBookByIdTest() {
         Book book = bookDao.saveBook(new Book("title deleteBookById", "isbn deleteBookById",
-                "publisher deleteBookById", null));
+                "publisher deleteBookById",  authorDao.getById(1L)));
         assertThat(book).isNotNull();
 
         bookDao.deleteBookById(book.getId());
 
-        Book byId = bookDao.findById(book.getId());
-        assertThat(byId).isNull();
+        assertThrows(EmptyResultDataAccessException.class, () -> {
+            bookDao.findById(book.getId());
+        });
     }
 
     @Test
-    void updateBook() {
+    void updateBookTest() {
         Book book = bookDao.saveBook(new Book("title updateBook", "isbn updateBook",
                 "publisher updateBook", authorDao.getById(1L)));
         assertThat(book).isNotNull();
@@ -60,29 +62,20 @@ class BookDaoTest {
         assertThat(bookUpdate.getPublisher()).isEqualTo(book.getPublisher());
         assertThat(bookUpdate.getTitle()).isEqualTo(book.getTitle());
 
-        bookDao.deleteBookById(book.getId());
     }
 
     @Test
-    void findByTitle() {
-        Book book = bookDao.saveBook(new Book("title findByTitle", "isbn findByTitle", "publisher findByTitle", null));
+    void findByTitleTest() {
+        Book book = bookDao.saveBook(new Book("title findByTitle", "isbn findByTitle", "publisher findByTitle",  authorDao.getById(1L)));
         assertThat(book).isNotNull();
-
-        List<Book> byTitle = bookDao.findByTitle(book.getTitle());
-        assertThat(!byTitle.isEmpty()).isEqualTo(true);
-
-        bookDao.deleteBookById(book.getId());
+        List<Book> byTitle = bookDao.findByTitle("Wolf in bowl");
+        assertThat(byTitle.isEmpty()).isEqualTo(false);
     }
 
     @Test
-    void findById() {
-        Book book = bookDao.saveBook(new Book("title findById", "isbn findById", "publisher findById", null));
+    void findByIdTest() {
+        Book book = bookDao.findById(1L);
         assertThat(book).isNotNull();
-
-        Book bookFetch = bookDao.findById(book.getId());
-        assertThat(bookFetch).isEqualTo(book);
-
-        bookDao.deleteBookById(book.getId());
     }
 
 }
