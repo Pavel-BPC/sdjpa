@@ -1,5 +1,6 @@
 package com.blinets.spjpa.dao;
 
+import com.blinets.spjpa.dao.rowMapper.AuthorExtractor;
 import com.blinets.spjpa.dao.rowMapper.AuthorRowMapper;
 import com.blinets.spjpa.domain.Author;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,12 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public Author getById(Long id) {
-        return jdbcTemplate.queryForObject("select * from author where id = ?", getRowMapper(), id);
+       String sql = "select a.id as id, a.first_name, a.last_name, b.id as book_id, b.title, b.publisher, b.isbn\n" +
+               "from author a\n" +
+               "         left outer join book b on a.id = b.author_id\n" +
+               "where a.id = ?";
+
+        return  jdbcTemplate.query(sql, new AuthorExtractor(), id);
     }
 
     @Override
