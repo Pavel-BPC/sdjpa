@@ -39,9 +39,8 @@ class BookDaoTest {
 
         bookDao.deleteBookById(book.getId());
 
-        assertThrows(EmptyResultDataAccessException.class, () -> {
-            bookDao.findById(book.getId());
-        });
+        Book byId = bookDao.findById(book.getId());
+        assertThat(byId).isNull();
     }
 
     @Test
@@ -65,7 +64,7 @@ class BookDaoTest {
     void findByTitleTest() {
         Book book = bookDao.saveBook(new Book("title findByTitle", "isbn findByTitle", "publisher findByTitle",  1L));
         assertThat(book).isNotNull();
-        List<Book> byTitle = bookDao.findByTitle("Wolf in bowl");
+        List<Book> byTitle = bookDao.findByTitle("title findByTitle");
         assertThat(byTitle.isEmpty()).isEqualTo(false);
     }
 
