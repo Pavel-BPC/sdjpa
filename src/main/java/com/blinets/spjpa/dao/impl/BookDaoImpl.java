@@ -15,55 +15,90 @@ import java.util.List;
 public class BookDaoImpl implements BookDao {
 
     private final EntityManagerFactory entityManagerFactory;
-    private final EntityManager entityManager;
+
+    public EntityManager getEntityManager() {
+        return entityManagerFactory.createEntityManager();
+    }
+
     public BookDaoImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
-        entityManager = entityManagerFactory.createEntityManager();
     }
 
     @Override
     public Book saveBook(Book book) {
-        entityManager.getTransaction().begin();
-        entityManager.persist(book);
-        entityManager.flush();
-        entityManager.getTransaction().commit();
-        return book;
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.persist(book);
+            entityManager.flush();
+            entityManager.getTransaction().commit();
+            return book;
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
     public void deleteBookById(Long id) {
-        entityManager.getTransaction().begin();
-        Book book = entityManager.find(Book.class, id);
-        entityManager.remove(book);
-        entityManager.flush();
-        entityManager.getTransaction().commit();
+
+        EntityManager entityManager = getEntityManager();
+        try {
+
+            entityManager.getTransaction().begin();
+            Book book = entityManager.find(Book.class, id);
+            entityManager.remove(book);
+            entityManager.flush();
+            entityManager.getTransaction().commit();
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
     public Book updateBook(Book book) {
-        entityManager.getTransaction().begin();
-        entityManager.merge(book);
-        entityManager.flush();
-        entityManager.getTransaction().commit();
-        return book;
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.merge(book);
+            entityManager.flush();
+            entityManager.getTransaction().commit();
+            return book;
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
     public List<Book> findByTitle(String title) {
-        TypedQuery<Book> query = entityManager.createQuery("select b from Book b where b.title = :title", Book.class);
-        query.setParameter("title", title);
-        return query.getResultList();
+        EntityManager entityManager = getEntityManager();
+        try {
+            TypedQuery<Book> query = entityManager.createQuery("select b from Book b where b.title = :title", Book.class);
+            query.setParameter("title", title);
+            return query.getResultList();
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
     public Book findById(Long id) {
-        return entityManager.find(Book.class, id);
+        EntityManager entityManager = getEntityManager();
+        try {
+            return entityManager.find(Book.class, id);
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
     public Book findByISBN(String isbn) {
-        TypedQuery<Book> query = entityManager.createQuery("select b from Book b where b.isbn = :isbn", Book.class);
-        query.setParameter("isbn", isbn);
-        return query.getSingleResult();
+        EntityManager entityManager = getEntityManager();
+        try {
+            TypedQuery<Book> query = entityManager.createQuery("select b from Book b where b.isbn = :isbn", Book.class);
+            query.setParameter("isbn", isbn);
+            return query.getSingleResult();
+        } finally {
+            entityManager.close();
+        }
     }
 }
