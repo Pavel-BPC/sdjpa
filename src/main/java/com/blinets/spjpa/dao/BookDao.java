@@ -10,4 +10,6 @@ public interface BookDao {
     Book updateBook(Book book);
     List<Book> findByTitle(String title);
     Book findById(Long id);
+
+    Book findByISBN(String isbn);
 }

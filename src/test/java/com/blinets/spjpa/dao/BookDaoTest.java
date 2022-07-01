@@ -61,6 +61,11 @@ class BookDaoTest {
     }
 
     @Test
+    void  findByIsbnTest(){
+        Book byISBN = bookDao.findByISBN("12345-12345");
+        assertThat(byISBN).isNotNull();
+    }
+    @Test
     void findByTitleTest() {
         Book book = bookDao.saveBook(new Book("title findByTitle", "isbn findByTitle", "publisher findByTitle",  1L));
         assertThat(book).isNotNull();
