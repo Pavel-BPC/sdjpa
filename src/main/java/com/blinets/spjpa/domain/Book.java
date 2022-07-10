@@ -13,6 +13,10 @@ import java.util.Objects;
 @Setter
 @ToString
 @Builder
+@NamedQueries({
+        @NamedQuery(name = "find_all_book",query = "from Book"),
+        @NamedQuery(name = "find_book_by_title",query = "from Book b where b.title = :title")
+})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

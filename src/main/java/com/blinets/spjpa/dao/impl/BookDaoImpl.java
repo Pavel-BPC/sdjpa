@@ -72,7 +72,7 @@ public class BookDaoImpl implements BookDao {
     public List<Book> findByTitle(String title) {
         EntityManager entityManager = getEntityManager();
         try {
-            TypedQuery<Book> query = entityManager.createQuery("select b from Book b where b.title = :title", Book.class);
+            TypedQuery<Book> query = entityManager.createNamedQuery("find_book_by_title", Book.class);
             query.setParameter("title", title);
             return query.getResultList();
         } finally {
@@ -99,6 +99,17 @@ public class BookDaoImpl implements BookDao {
             return query.getSingleResult();
         } finally {
             entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Book> findAll() {
+        EntityManager entityManager = getEntityManager();
+        try {
+            TypedQuery<Book> books = entityManager.createNamedQuery("find_all_book", Book.class);
+            return books.getResultList();
+        }finally {
+                entityManager.close();
         }
     }
 }

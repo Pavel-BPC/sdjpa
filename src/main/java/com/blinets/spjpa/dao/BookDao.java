@@ -12,4 +12,6 @@ public interface BookDao {
     Book findById(Long id);
 
     Book findByISBN(String isbn);
+    List<Book> findAll();
+
 }

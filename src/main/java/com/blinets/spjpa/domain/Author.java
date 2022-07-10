@@ -14,7 +14,10 @@ import java.util.Objects;
 @Setter
 @ToString
 @Builder
-@NamedQuery(name = "author_find_all", query = "from Author")
+@NamedQueries({
+        @NamedQuery(name = "author_find_all", query = "from Author"),
+        @NamedQuery(name = "author_by_name", query = "from Author a where a.firstName = :first_name and a.lastName = :last_name")
+})
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,3 +43,5 @@ public class Author {
         return getClass().hashCode();
     }
 }
+
+

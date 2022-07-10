@@ -61,9 +61,7 @@ public class AuthorDaoImpl implements AuthorDao {
     public Author findByName(String firstName, String lastName) {
         EntityManager entityManager = getEntityManager();
         try {
-            TypedQuery<Author> query = entityManager.createQuery("select a from Author a" +
-                            " where a.firstName = :first_name and a.lastName = :last_name",
-                    Author.class);
+            TypedQuery<Author> query = entityManager.createNamedQuery("author_by_name", Author.class);
             query.setParameter("first_name", firstName);
             query.setParameter("last_name", lastName);
             return query.getSingleResult();
