@@ -24,6 +24,13 @@ class AuthorDaoImplTest {
     AuthorDao authorDao;
 
     @Test
+    void findAllAuthorTest(){
+        List<Author> authors  = authorDao.findAll();
+        assertThat(authors).isNotNull();
+        assertThat(authors.size()).isGreaterThan(0);
+
+    }
+    @Test
     void getListAuthorByLastNameLikeTest(){
         List<Author> authors = authorDao.getListAuthorByLastNameLike("Blinets");
 

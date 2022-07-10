@@ -14,6 +14,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @Builder
+@NamedQuery(name = "author_find_all", query = "from Author")
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
