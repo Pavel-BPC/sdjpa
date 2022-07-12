@@ -6,14 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataJpaTest
 @ActiveProfiles("local")
@@ -29,6 +26,12 @@ class BookDaoTest {
         List<Book> all = bookDao.findAll();
         assertThat(all).isNotNull();
         assertThat(all.size()).isGreaterThan(0);
+    }
+
+    @Test
+    void findBookByTitleNativeTest() {
+        Book book = bookDao.findBookByTitleCriteria("Wolf in bowl");
+        assertThat(book).isNotNull();
     }
 
     @Test

@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("local")
@@ -24,19 +22,27 @@ class AuthorDaoImplTest {
     AuthorDao authorDao;
 
     @Test
-    void findAllAuthorTest(){
-        List<Author> authors  = authorDao.findAll();
+    void findAllAuthorTest() {
+        List<Author> authors = authorDao.findAll();
         assertThat(authors).isNotNull();
         assertThat(authors.size()).isGreaterThan(0);
 
     }
+
     @Test
-    void getListAuthorByLastNameLikeTest(){
+    void findByNameCriteria() {
+        Author author = authorDao.findByNameCriteria("Pavel", "Blinets");
+        assertThat(author).isNotNull();
+    }
+
+    @Test
+    void getListAuthorByLastNameLikeTest() {
         List<Author> authors = authorDao.getListAuthorByLastNameLike("Blinets");
 
         assertThat(authors).isNotNull();
         assertThat(authors.size()).isGreaterThan(0);
     }
+
     @Test
     void findByIdTest() {
         Author byId = authorDao.findById(1L);

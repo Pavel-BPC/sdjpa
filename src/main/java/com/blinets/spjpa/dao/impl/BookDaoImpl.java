@@ -2,13 +2,15 @@ package com.blinets.spjpa.dao.impl;
 
 import com.blinets.spjpa.dao.BookDao;
 import com.blinets.spjpa.domain.Book;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Component
@@ -108,8 +110,25 @@ public class BookDaoImpl implements BookDao {
         try {
             TypedQuery<Book> books = entityManager.createNamedQuery("find_all_book", Book.class);
             return books.getResultList();
-        }finally {
-                entityManager.close();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Book findBookByTitleCriteria(String title) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Book> criteriaQuery = criteriaBuilder.createQuery(Book.class);
+            Root<Book> from = criteriaQuery.from(Book.class);
+            ParameterExpression<String> parameterTitle = criteriaBuilder.parameter(String.class);
+            criteriaQuery.select(from).where(criteriaBuilder.equal(from.get("title"), parameterTitle));
+            TypedQuery<Book> query = entityManager.createQuery(criteriaQuery);
+            query.setParameter(parameterTitle, title);
+            return query.getSingleResult();
+        } finally {
+            entityManager.close();
         }
     }
 }

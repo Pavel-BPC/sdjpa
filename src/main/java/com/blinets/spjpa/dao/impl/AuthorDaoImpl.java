@@ -2,13 +2,13 @@ package com.blinets.spjpa.dao.impl;
 
 import com.blinets.spjpa.dao.AuthorDao;
 import com.blinets.spjpa.domain.Author;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Component
@@ -30,6 +30,33 @@ public class AuthorDaoImpl implements AuthorDao {
         }
     }
 
+    @Override
+    public Author findByNameCriteria(String firstName, String lastName) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Author> criteriaQuery = criteriaBuilder.createQuery(Author.class);
+
+            Root<Author> root = criteriaQuery.from(Author.class);
+
+            ParameterExpression<String> firstNameParam = criteriaBuilder.parameter(String.class);
+            ParameterExpression<String> lastNameParam = criteriaBuilder.parameter(String.class);
+
+            Predicate firstNamePred = criteriaBuilder.equal(root.get("firstName"), firstNameParam);
+            Predicate lastNamePred = criteriaBuilder.equal(root.get("lastName"), lastNameParam);
+
+            criteriaQuery.select(root).where(criteriaBuilder.and(firstNamePred, lastNamePred));
+
+            TypedQuery<Author> query = entityManager.createQuery(criteriaQuery);
+            query.setParameter(firstNameParam, firstName);
+            query.setParameter(lastNameParam, lastName);
+
+            return query.getSingleResult();
+        } finally {
+            entityManager.close();
+        }
+    }
+
     public AuthorDaoImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
@@ -41,8 +68,7 @@ public class AuthorDaoImpl implements AuthorDao {
             Query author_find_all = entityManager.createNamedQuery("author_find_all");
             return author_find_all.getResultList();
 
-        }
-        finally {
+        } finally {
             entityManager.close();
         }
     }
