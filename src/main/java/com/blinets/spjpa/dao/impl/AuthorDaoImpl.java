@@ -57,6 +57,19 @@ public class AuthorDaoImpl implements AuthorDao {
         }
     }
 
+    @Override
+    public Author findByNameNative(String firstName, String lastName) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            Query nativeQuery = entityManager.createNativeQuery("select * from author a where a.first_name = ? and a.last_name = ?", Author.class);
+            nativeQuery.setParameter(1, firstName);
+            nativeQuery.setParameter(2, lastName);
+            return (Author) nativeQuery.getSingleResult();
+        } finally {
+            entityManager.close();
+        }
+    }
+
     public AuthorDaoImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }

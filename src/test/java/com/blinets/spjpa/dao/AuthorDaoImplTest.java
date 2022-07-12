@@ -36,6 +36,12 @@ class AuthorDaoImplTest {
     }
 
     @Test
+    void findByNameNative() {
+        Author author = authorDao.findByNameNative("Pavel", "Blinets");
+        assertThat(author).isNotNull();
+    }
+
+    @Test
     void getListAuthorByLastNameLikeTest() {
         List<Author> authors = authorDao.getListAuthorByLastNameLike("Blinets");
 

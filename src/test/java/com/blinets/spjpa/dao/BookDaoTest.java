@@ -29,8 +29,13 @@ class BookDaoTest {
     }
 
     @Test
-    void findBookByTitleNativeTest() {
+    void findBookByTitleCriteriaTest() {
         Book book = bookDao.findBookByTitleCriteria("Wolf in bowl");
+        assertThat(book).isNotNull();
+    }
+    @Test
+    void findBookByTitleNativeTest() {
+        Book book = bookDao.findBookByTitleNative("Wolf in bowl");
         assertThat(book).isNotNull();
     }
 

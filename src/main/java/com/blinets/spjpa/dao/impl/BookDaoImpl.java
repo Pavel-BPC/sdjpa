@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -127,6 +128,18 @@ public class BookDaoImpl implements BookDao {
             TypedQuery<Book> query = entityManager.createQuery(criteriaQuery);
             query.setParameter(parameterTitle, title);
             return query.getSingleResult();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Book findBookByTitleNative(String title) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            Query nativeQuery = entityManager.createNativeQuery("select * from book b where b.title = :title", Book.class);
+            nativeQuery.setParameter("title", title);
+            return (Book) nativeQuery.getSingleResult();
         } finally {
             entityManager.close();
         }
