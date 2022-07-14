@@ -35,9 +35,8 @@ class AuthorDaoImplTest {
 
         authorDao.deleteAuthorById(authorSave.getId());
 
-        assertThrows(EmptyResultDataAccessException.class, () -> {
-            authorDao.findById(authorSave.getId());
-        });
+        Author byId = authorDao.findById(authorSave.getId());
+        assertThat(byId).isNull();
     }
 
     @Test
