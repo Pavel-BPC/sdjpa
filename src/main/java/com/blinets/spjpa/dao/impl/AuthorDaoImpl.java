@@ -5,8 +5,6 @@ import com.blinets.spjpa.domain.Author;
 import com.blinets.spjpa.repository.AuthorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.hibernate.ObjectNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

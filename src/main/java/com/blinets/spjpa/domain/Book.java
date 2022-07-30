@@ -1,14 +1,12 @@
 package com.blinets.spjpa.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import java.util.Objects;
 
+@NamedQuery(name = "Book.jpaNameQuery", query = "From Book b where b.title = :title")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
