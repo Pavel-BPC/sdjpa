@@ -3,6 +3,7 @@ package com.blinets.spjpa.dao;
 import com.blinets.spjpa.dao.rowMapper.BookRowMapper;
 import com.blinets.spjpa.domain.Book;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -49,6 +50,33 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Book findById(Long id) {
         return jdbcTemplate.queryForObject("select * from book where id = ?", bookRowMapper, id);
+    }
+
+    @Override
+    public List<Book> findAllBooks() {
+        return jdbcTemplate.query("SELECT * FROM book", bookRowMapper);
+    }
+
+    @Override
+    public List<Book> findAllBooks(int pageSize, int offset) {
+        return jdbcTemplate.query("select * from book limit ? offset ? ", bookRowMapper, pageSize, offset);
+    }
+
+    @Override
+    public List<Book> findAllBooks(Pageable pageable) {
+        return jdbcTemplate.query("select * from book limit ? offset ? ", bookRowMapper,
+                pageable.getPageSize(),
+                pageable.getOffset());
+    }
+
+    @Override
+    public List<Book> findAllBooksSortByTitle(Pageable pageable) {
+        String sql = "select * from book order by title " +
+                pageable.getSort().getOrderFor("title").getDirection().name() +
+                " limit ? offset ?";
+        return jdbcTemplate.query(sql, bookRowMapper,
+                pageable.getPageSize(),
+                pageable.getOffset());
     }
 
 }

@@ -10,6 +10,6 @@ import java.sql.SQLException;
 public class AuthorExtractor implements ResultSetExtractor<Author> {
     @Override
     public Author extractData(ResultSet rs) throws SQLException, DataAccessException {
-        return new AuthorRowMapper().mapRow(rs, 0);
+        return new AuthorRowMapper().mapRowBook(rs, 0);
     }
 }
