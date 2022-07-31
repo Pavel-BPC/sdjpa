@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @ActiveProfiles("local")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ComponentScan("com.blinets.spjpa.dao")
+@ComponentScan("com.blinets.spjpa")
 class AuthorDaoImplTest {
 
     @Autowired

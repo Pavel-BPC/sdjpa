@@ -19,7 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @DataJpaTest
 @ActiveProfiles("local")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ComponentScan("com.blinets.spjpa.repository")
+@ComponentScan("com.blinets.spjpa")
 class BookRepositoryTest {
 
     @Autowired
