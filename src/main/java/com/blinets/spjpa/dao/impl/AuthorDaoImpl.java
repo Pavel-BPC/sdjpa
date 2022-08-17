@@ -5,8 +5,10 @@ import com.blinets.spjpa.domain.Author;
 import com.blinets.spjpa.repository.AuthorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -49,5 +51,10 @@ public class AuthorDaoImpl implements AuthorDao {
     @Override
     public void deleteAuthorById(Long id) {
         authorRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Author> findAuthorsByLastName(String name, Pageable pageable) {
+        return authorRepository.findAuthorsByLastName(name, pageable).getContent();
     }
 }

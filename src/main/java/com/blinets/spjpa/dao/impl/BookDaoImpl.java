@@ -4,6 +4,9 @@ import com.blinets.spjpa.dao.BookDao;
 import com.blinets.spjpa.domain.Book;
 import com.blinets.spjpa.repository.BookRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -50,5 +53,27 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Book findById(Long id) {
         return bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public List<Book> findAllBooks(int pageSize, int offset) {
+        PageRequest pageRequest = PageRequest.ofSize(pageSize);
+        if (offset > 0) {
+            pageRequest = pageRequest.withPage(offset / pageSize);
+        } else {
+            pageRequest = pageRequest.withPage(offset);
+        }
+        return findAllBooks(pageRequest);
+    }
+
+    @Override
+    public List<Book> findAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable).getContent();
+    }
+
+    @Override
+    public List<Book> findAllBooksSortByTitle(Pageable pageable) {
+        Page<Book> books = bookRepository.findAll(pageable);
+        return books.getContent();
     }
 }
