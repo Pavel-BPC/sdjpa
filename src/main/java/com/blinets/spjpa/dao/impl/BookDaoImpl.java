@@ -2,6 +2,7 @@ package com.blinets.spjpa.dao.impl;
 
 import com.blinets.spjpa.dao.BookDao;
 import com.blinets.spjpa.domain.Book;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -140,6 +141,46 @@ public class BookDaoImpl implements BookDao {
             Query nativeQuery = entityManager.createNativeQuery("select * from book b where b.title = :title", Book.class);
             nativeQuery.setParameter("title", title);
             return (Book) nativeQuery.getSingleResult();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Book> findAllBooks(int pageSize, int offset) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            TypedQuery<Book> query = entityManager.createQuery("select b from Book b", Book.class);
+            query.setMaxResults(pageSize);
+            query.setFirstResult(offset);
+            return  query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Book> findAllBooks(Pageable pageable) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            TypedQuery<Book> query = entityManager.createQuery("select b from Book b", Book.class);
+            query.setFirstResult(Math.toIntExact(pageable.getOffset()));
+            query.setMaxResults(pageable.getPageSize());
+            return  query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Book> findAllBooksSortByTitle(Pageable pageable) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            String sql = "select b from Book b order by b.title " + pageable.getSort().getOrderFor("title").getDirection().name();
+            TypedQuery<Book> query = entityManager.createQuery(sql, Book.class);
+            query.setFirstResult(Math.toIntExact(pageable.getOffset()));
+            query.setMaxResults(pageable.getPageSize());
+            return  query.getResultList();
         } finally {
             entityManager.close();
         }

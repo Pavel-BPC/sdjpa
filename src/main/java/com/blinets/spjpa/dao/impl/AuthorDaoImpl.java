@@ -2,6 +2,7 @@ package com.blinets.spjpa.dao.impl;
 
 import com.blinets.spjpa.dao.AuthorDao;
 import com.blinets.spjpa.domain.Author;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -66,6 +67,23 @@ public class AuthorDaoImpl implements AuthorDao {
             nativeQuery.setParameter(2, lastName);
             return (Author) nativeQuery.getSingleResult();
         } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Author> findAuthorsByLastName(String name, Pageable pageable) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            String sql = "select a from Author a where  a.lastName = :lastName order by a.firstName " +
+                    pageable.getSort().getOrderFor("lastName").getDirection().name() ;
+            TypedQuery<Author> query = entityManager.createQuery(sql, Author.class);
+            query.setParameter("lastName", name);
+            query.setFirstResult(Math.toIntExact(pageable.getOffset()));
+            query.setMaxResults(pageable.getPageSize());
+            return query.getResultList();
+        }
+        finally {
             entityManager.close();
         }
     }

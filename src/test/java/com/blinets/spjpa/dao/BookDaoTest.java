@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -95,4 +97,52 @@ class BookDaoTest {
         assertThat(book).isNotNull();
     }
 
+    @Test
+    void findAllBooksPage_1_Test() {
+        List<Book> allBooks = bookDao.findAllBooks(10, 0);
+        assertThat(allBooks).isNotNull();
+        assertThat(allBooks.size()).isEqualTo(10);
+    }
+
+    @Test
+    void findAllBooksPage_2_Test() {
+        List<Book> allBooks = bookDao.findAllBooks(10, 10);
+        assertThat(allBooks).isNotNull();
+        assertThat(allBooks.size()).isEqualTo(10);
+    }
+
+    @Test
+    void findAllBooksPage_10_Test() {
+        List<Book> allBooks = bookDao.findAllBooks(10, 100);
+        assertThat(allBooks).isNotNull();
+        assertThat(allBooks.size()).isEqualTo(0);
+    }
+
+    @Test
+    void findAllBooksPage_1_pageable_Test() {
+        List<Book> allBooks = bookDao.findAllBooks(PageRequest.of(0, 10));
+        assertThat(allBooks).isNotNull();
+        assertThat(allBooks.size()).isEqualTo(10);
+    }
+
+    @Test
+    void findAllBooksPage_2_pageable_Test() {
+        List<Book> allBooks = bookDao.findAllBooks(PageRequest.of(1, 10));
+        assertThat(allBooks).isNotNull();
+        assertThat(allBooks.size()).isEqualTo(10);
+    }
+
+    @Test
+    void findAllBooksPage_10_pageable_Test() {
+        List<Book> allBooks = bookDao.findAllBooks(PageRequest.of(10, 10));
+        assertThat(allBooks).isNotNull();
+        assertThat(allBooks.size()).isEqualTo(0);
+    }
+    @Test
+    void findAllBooksPage_1_sortByTitle_Test() {
+        List<Book> allBooks = bookDao.findAllBooksSortByTitle(PageRequest.of(1, 10,
+                Sort.by(Sort.Order.desc("title"))));
+        assertThat(allBooks).isNotNull();
+        assertThat(allBooks.size()).isEqualTo(10);
+    }
 }

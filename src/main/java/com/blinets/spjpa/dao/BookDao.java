@@ -1,6 +1,7 @@
 package com.blinets.spjpa.dao;
 
 import com.blinets.spjpa.domain.Book;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface BookDao {
     Book findBookByTitleCriteria(String title);
 
     Book findBookByTitleNative(String title);
+    List<Book> findAllBooks(int pageSize, int offset);
+    List<Book> findAllBooks(Pageable pageable);
+    List<Book> findAllBooksSortByTitle(Pageable pageable);
 }
