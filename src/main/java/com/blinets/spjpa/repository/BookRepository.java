@@ -1,7 +1,6 @@
 package com.blinets.spjpa.repository;
 
 import com.blinets.spjpa.domain.Book;
-import jakarta.persistence.NamedQueries;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

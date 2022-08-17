@@ -24,7 +24,7 @@ class BookDaoTest {
     BookDao bookDao;
 
     @Test
-    void saveBookTest(){
+    void saveBookTest() {
         Book book = bookDao.saveBook(new Book("title saveBookTest", "isbn saveBookTest",
                 "publisher saveBookTest", 1L));
         assertThat(book).isNotNull();
@@ -33,12 +33,12 @@ class BookDaoTest {
     @Test
     void deleteBookByIdTest() {
         Book book = bookDao.saveBook(new Book("title deleteBookById", "isbn deleteBookById",
-                "publisher deleteBookById",  1L));
+                "publisher deleteBookById", 1L));
         assertThat(book).isNotNull();
 
         bookDao.deleteBookById(book.getId());
 
-        assertThrows(EntityNotFoundException.class,() -> bookDao.findById(book.getId()));
+        assertThrows(EntityNotFoundException.class, () -> bookDao.findById(book.getId()));
     }
 
     @Test
@@ -60,7 +60,7 @@ class BookDaoTest {
 
     @Test
     void findByTitleTest() {
-        Book book = bookDao.saveBook(new Book("title findByTitle", "isbn findByTitle", "publisher findByTitle",  1L));
+        Book book = bookDao.saveBook(new Book("title findByTitle", "isbn findByTitle", "publisher findByTitle", 1L));
         assertThat(book).isNotNull();
         List<Book> byTitle = bookDao.findByTitle("title findByTitle");
         assertThat(byTitle.isEmpty()).isEqualTo(false);

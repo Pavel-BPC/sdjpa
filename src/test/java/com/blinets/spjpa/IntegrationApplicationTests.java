@@ -1,6 +1,5 @@
 package com.blinets.spjpa;
 
-import com.blinets.spjpa.domain.Book;
 import com.blinets.spjpa.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

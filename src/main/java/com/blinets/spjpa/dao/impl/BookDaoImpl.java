@@ -4,7 +4,6 @@ import com.blinets.spjpa.dao.BookDao;
 import com.blinets.spjpa.domain.Book;
 import com.blinets.spjpa.repository.BookRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,13 +30,13 @@ public class BookDaoImpl implements BookDao {
     @Override
     public Book updateBook(Book book) {
         Optional<Book> bookOptional = bookRepository.findById(book.getId());
-        if(bookOptional.isPresent()){
+        if (bookOptional.isPresent()) {
             Book book1 = bookOptional.get();
             book1.setIsbn(book.getIsbn());
             book1.setTitle(book.getTitle());
             book1.setPublisher(book.getPublisher());
             book1.setAuthorId(book.getAuthorId());
-            return  bookRepository.save(book1);
+            return bookRepository.save(book1);
 
         }
         return null;

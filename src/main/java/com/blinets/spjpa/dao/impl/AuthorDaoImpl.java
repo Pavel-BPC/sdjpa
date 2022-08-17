@@ -24,7 +24,7 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public Author findByName(String firstName, String lastName) {
-        return authorRepository.findAuthorByFirstNameAndLastName(firstName,lastName)
+        return authorRepository.findAuthorByFirstNameAndLastName(firstName, lastName)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
