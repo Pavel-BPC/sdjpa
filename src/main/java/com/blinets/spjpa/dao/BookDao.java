@@ -11,7 +11,6 @@ public interface BookDao {
     Book updateBook(Book book);
     List<Book> findByTitle(String title);
     Book findById(Long id);
-
     List<Book> findAllBooks();
     List<Book> findAllBooks(int pageSize, int offset);
     List<Book> findAllBooks(Pageable pageable);

@@ -1,6 +1,9 @@
 package com.blinets.spjpa.dao;
 
 import com.blinets.spjpa.domain.Author;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface AuthorDao {
     Author getById(Long id);
@@ -8,4 +11,5 @@ public interface AuthorDao {
     Author saveNewAuthor(Author author);
     Author updateAuthor(Author author);
     void deleteAuthorById(Long id);
+    List<Author> findAuthorsByLastName(String name, Pageable pageable);
 }

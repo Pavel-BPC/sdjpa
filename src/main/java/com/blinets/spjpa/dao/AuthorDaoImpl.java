@@ -4,9 +4,12 @@ import com.blinets.spjpa.dao.rowMapper.AuthorExtractor;
 import com.blinets.spjpa.dao.rowMapper.AuthorRowMapper;
 import com.blinets.spjpa.domain.Author;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class AuthorDaoImpl implements AuthorDao {
@@ -15,12 +18,12 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public Author getById(Long id) {
-       String sql = "select a.id as id, a.first_name, a.last_name, b.id as book_id, b.title, b.publisher, b.isbn\n" +
-               "from author a\n" +
-               "         left outer join book b on a.id = b.author_id\n" +
-               "where a.id = ?";
+        String sql = "select a.id as id, a.first_name, a.last_name, b.id as book_id, b.title, b.publisher, b.isbn\n" +
+                "from author a\n" +
+                "         left outer join book b on a.id = b.author_id\n" +
+                "where a.id = ?";
 
-        return  jdbcTemplate.query(sql, new AuthorExtractor(), id);
+        return jdbcTemplate.query(sql, new AuthorExtractor(), id);
     }
 
     @Override
@@ -46,6 +49,19 @@ public class AuthorDaoImpl implements AuthorDao {
     @Override
     public void deleteAuthorById(Long id) {
         jdbcTemplate.update("DELETE from author where id = ?", id);
+    }
+
+    @Override
+    public List<Author> findAuthorsByLastName(String name, Pageable pageable) {
+        String sql = "select * from author " +
+                "where last_name = ? " +
+                "order by  first_name " +
+                pageable.getSort().getOrderFor("lastName").getDirection().name() +
+                " limit ? offset ? ";
+        return jdbcTemplate.query(sql, getRowMapper(),
+                name,
+                pageable.getPageSize(),
+                pageable.getOffset());
     }
 
     private RowMapper<Author> getRowMapper() {
